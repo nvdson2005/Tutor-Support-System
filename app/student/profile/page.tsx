@@ -2,11 +2,11 @@
 
 import StudentTopBar from "@/app/_components/studenttopbar";
 import Sidebar from "../../_components/sidebar";
-
+import { navigateData } from "../_components/navigatedata";
 export default function StudentProfile() {
   return (
     <div className="flex min-h-screen bg-gray-100 text-black">
-      <Sidebar chosenIndex={2} />
+      <Sidebar chosenIndex={2} navigateData={navigateData} />
       <main className="flex-1">
         <StudentTopBar studentName="Nguyen Van A"></StudentTopBar>
         <div className="p-10">

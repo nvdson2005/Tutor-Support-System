@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
 import StudentTopBar from "@/app/_components/studenttopbar";
+import { navigateData } from "../_components/navigatedata";
 const studentName: string = "Nguyen Van A";
 const upcomingSessions = [
   {
@@ -53,7 +54,7 @@ export default function StudentDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100 text-black">
       {/* Sidebar */}
-      <Sidebar chosenIndex={0}/>
+      <Sidebar chosenIndex={0} navigateData={navigateData} />
 
       {/* Main Content */}
       <main className="flex-1">
