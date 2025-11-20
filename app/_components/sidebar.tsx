@@ -1,8 +1,29 @@
+"use client";
+
 import { useRouter } from "next/navigation";
-export default function Sidebar({chosenIndex, navigateData}: {chosenIndex: number, navigateData?: Array<{path: string, label: string}>}) {
-    const router = useRouter();
+
+export default function Sidebar({
+  chosenIndex,
+  navigateData,
+  onLogout,
+  logoutLabel = "Logout",
+}: {
+  chosenIndex: number;
+  navigateData?: Array<{ path: string; label: string }>;
+  onLogout?: () => void;
+  logoutLabel?: string;
+}) {
+  const router = useRouter();
   const handleNavigation = (path: string) => {
     router.push(path);
+  };
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      router.push("/auth/login");
+    }
   };
 
   return (
@@ -12,14 +33,21 @@ export default function Sidebar({chosenIndex, navigateData}: {chosenIndex: numbe
         {navigateData?.map((item, index) => (
           <button
             key={index}
-            className={`w-full text-left py-2 px-4 rounded ${chosenIndex === index ? 'bg-blue-800' : 'hover:bg-blue-800'}`}
+            className={`w-full text-left py-2 px-4 rounded ${
+              chosenIndex === index ? "bg-blue-800" : "hover:bg-blue-800"
+            }`}
             onClick={() => handleNavigation(item.path)}
           >
             {item.label}
           </button>
         ))}
       </nav>
-      <button className="mt-10 py-2 px-4 rounded bg-blue-700 hover:bg-blue-800">Logout</button>
+      <button
+        onClick={handleLogout}
+        className="mt-10 py-2 px-4 rounded bg-blue-700 hover:bg-blue-800"
+      >
+        {logoutLabel}
+      </button>
     </aside>
   );
 }
