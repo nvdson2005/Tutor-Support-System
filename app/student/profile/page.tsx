@@ -1,6 +1,5 @@
 "use client";
-
-import StudentTopBar from "@/app/_components/studenttopbar";
+import TopBar from "@/app/_components/topbar";
 import Sidebar from "../../_components/sidebar";
 import { navigateData } from "../_components/navigatedata";
 export default function StudentProfile() {
@@ -8,7 +7,7 @@ export default function StudentProfile() {
     <div className="flex min-h-screen bg-gray-100 text-black">
       <Sidebar chosenIndex={2} navigateData={navigateData} />
       <main className="flex-1">
-        <StudentTopBar studentName="Nguyen Van A"></StudentTopBar>
+        <TopBar username="Nguyen Van A" dashboardContent="Student Profile"></TopBar>
         <div className="p-10">
           <section className="max-w-3xl mx-auto bg-white rounded-lg shadow p-8">
             <div className="flex justify-between items-center mb-6">

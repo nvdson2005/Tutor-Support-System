@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
-import StudentTopBar from "@/app/_components/studenttopbar";
+import TopBar from "@/app/_components/topbar";
 import { navigateData } from "../_components/navigatedata";
 const studentName: string = "Nguyen Van A";
 const upcomingSessions = [
@@ -58,9 +58,9 @@ export default function StudentDashboard() {
 
       {/* Main Content */}
       <main className="flex-1">
+        <TopBar username={studentName} dashboardContent="Student Dashboard"></TopBar>
         <div className="p-10">
           <div className="mb-6">
-            <StudentTopBar studentName={studentName}></StudentTopBar>
             <h3 className="text-lg font-semibold mb-2">
               Welcome back, {studentName}!
             </h3>

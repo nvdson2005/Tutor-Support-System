@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Sidebar from "../../_components/sidebar";
-import StudentTopBar from "@/app/_components/studenttopbar";
+import StudentTopBar from "@/app/_components/topbar";
 import { navigateData } from "../_components/navigatedata";
+import TopBar from "@/app/_components/topbar";
 const oldSessions = [
   {
     id: 1,
@@ -48,7 +49,7 @@ export default function OldSessions() {
     <div className="flex min-h-screen bg-gray-100 text-black">
       <Sidebar chosenIndex={3} navigateData={navigateData} />
       <main className="flex-1">
-        <StudentTopBar studentName="Nguyen Van A"></StudentTopBar>
+        <TopBar username="Nguyen Van A" dashboardContent="Old Sessions"></TopBar>
         <div className="p-10">
           <section className="max-w-2xl mx-auto">
             <h3

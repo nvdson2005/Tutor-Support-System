@@ -1,4 +1,57 @@
+"use client";
+import { useRouter } from "next/navigation";
+const tutorAccount = {
+  username: "tutor",
+  password: "1",
+};
+
+const studentAccount = {
+  username: "student",
+  password: "1",
+};
+
+const adminAccount = {
+  username: "admin",
+  password: "1",
+};
+
 export default function Login() {
+  const router = useRouter();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(e.target);
+    const form = e.target as HTMLFormElement;
+    const username = (
+      form
+        .getElementsByTagName("input")
+        .namedItem("username") as HTMLInputElement
+    ).value;
+    const password = (
+      form
+        .getElementsByTagName("input")
+        .namedItem("password") as HTMLInputElement
+    ).value;
+
+    if (
+      username === tutorAccount.username &&
+      password === tutorAccount.password
+    ) {
+      router.push("/tutor/dashboard");
+    } else if (
+      username === studentAccount.username &&
+      password === studentAccount.password
+    ) {
+      router.push("/student/dashboard");
+    } else if (
+      username === adminAccount.username &&
+      password === adminAccount.password
+    ) {
+      router.push("/admin/tracking");
+    } else {
+      alert("Invalid username or password");
+    }
+  };
   return (
     <div className="h-dvh overflow-y-clip bg-linear-to-b from-zinc-100 to-zinc-200 flex items-center justify-center font-sans">
       <div className="w-full h-full bg-white rounded-lg shadow-lg">
@@ -13,12 +66,13 @@ export default function Login() {
               Enter your Username and Password
             </h2>
             <div className="w-full h-0.5 bg-gray-200 my-1">-</div>
-            <form className="">
+            <form className="text-black" onSubmit={handleLogin}>
               <div>
                 <label className="block text-gray-700 font-medium mb-1">
                   Username
                 </label>
                 <input
+                  name="username"
                   type="text"
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-yellow-50"
                 />
@@ -28,13 +82,16 @@ export default function Login() {
                   Password
                 </label>
                 <input
+                  name="password"
                   type="password"
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-yellow-50"
                 />
               </div>
               <div className="flex items-center mt-2">
                 <input type="checkbox" id="warn" className="mr-2" />
-                <p className="text-sm text-slate-600">Warn me before logging in to other pages</p>
+                <p className="text-sm text-slate-600">
+                  Warn me before logging in to other pages
+                </p>
               </div>
               <div className="w-full h-0.5 bg-gray-200 my-1">-</div>
               <div className="flex gap-2 mt-4">

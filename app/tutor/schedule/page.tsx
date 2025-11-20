@@ -1,5 +1,5 @@
-'use client';
-
+"use client";
+import TopBar from "@/app/_components/topbar";
 import { useState } from "react";
 import Sidebar from "../../_components/sidebar";
 import { navigateData } from "../_components/navigatedata";
@@ -15,7 +15,9 @@ const days = [
 
 export default function TutorSchedule() {
   // State for schedule slots per day
-  const [schedules, setSchedules] = useState<Record<string, Array<{ start: string; end: string }>>>({
+  const [schedules, setSchedules] = useState<
+    Record<string, Array<{ start: string; end: string }>>
+  >({
     "Oct 24, 2025": [{ start: "19:00", end: "21:00" }],
     "Oct 25, 2025": [{ start: "15:00", end: "16:30" }],
     "Oct 26, 2025": [{ start: "9:00", end: "10:30" }],
@@ -54,20 +56,21 @@ export default function TutorSchedule() {
 
   return (
     <div className="flex min-h-screen bg-gray-100 text-black">
-      <Sidebar chosenIndex={1} navigateData={navigateData}/>
+      <Sidebar chosenIndex={1} navigateData={navigateData} />
       <main className="flex-1">
-        <div className="w-full flex justify-between items-center px-6 py-8 bg-white shadow">
-          <h2 className="text-2xl font-bold">Tutor Dashboard</h2>
-          <div className="flex items-center gap-2">
-            <span className="text-gray-500">Tutor Name</span>
-            <span className="w-8 h-8 rounded-full bg-gray-300 inline-block"></span>
-          </div>
-        </div>
+        <TopBar
+          username="Nguyen Van A"
+          dashboardContent="Tutor Schedule"
+        ></TopBar>
         <div className="p-10">
           <div className="mb-6">
             <div className="flex gap-2 items-center mb-4">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded font-semibold">My Schedule</button>
-              <button className="bg-red-100 text-red-700 px-4 py-2 rounded font-semibold ml-auto">Cancel</button>
+              <button className="bg-blue-600 text-white px-4 py-2 rounded font-semibold">
+                My Schedule
+              </button>
+              <button className="bg-red-100 text-red-700 px-4 py-2 rounded font-semibold ml-auto">
+                Cancel
+              </button>
             </div>
             <div className="grid grid-cols-7 gap-4 bg-white rounded-lg shadow p-6">
               {days.map((day) => (
@@ -76,7 +79,10 @@ export default function TutorSchedule() {
                   <div className="text-xs text-gray-500 mb-2">{day.date}</div>
                   <div className="flex flex-col gap-2 w-full">
                     {(schedules[day.date] || []).map((slot, idx) => (
-                      <div key={idx} className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs text-center">
+                      <div
+                        key={idx}
+                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs text-center"
+                      >
                         {slot.start} - {slot.end}
                       </div>
                     ))}
@@ -116,19 +122,21 @@ export default function TutorSchedule() {
             </div>
             <div className="mb-4 flex gap-2 items-center">
               <div>
-                <label className="block text-sm font-semibold mb-1">Time:</label>
+                <label className="block text-sm font-semibold mb-1">
+                  Time:
+                </label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="time"
                     value={newStart}
-                    onChange={e => setNewStart(e.target.value)}
+                    onChange={(e) => setNewStart(e.target.value)}
                     className="border rounded px-2 py-1"
                   />
                   <span>-</span>
                   <input
                     type="time"
                     value={newEnd}
-                    onChange={e => setNewEnd(e.target.value)}
+                    onChange={(e) => setNewEnd(e.target.value)}
                     className="border rounded px-2 py-1"
                   />
                 </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Sidebar from "../../_components/sidebar";
-import StudentTopBar from "@/app/_components/studenttopbar";
+import TopBar from "@/app/_components/topbar";
 import { navigateData } from "../_components/navigatedata";
 const tutors = [
   {
@@ -61,7 +61,7 @@ export default function FindTutor() {
     <div className="flex min-h-screen bg-gray-100 text-black">
       <Sidebar chosenIndex={1} navigateData={navigateData} />
       <main className="flex-1">
-        <StudentTopBar studentName="Nguyen Van A" />
+        <TopBar username="Nguyen Van A" dashboardContent="Find Tutor" />
         <div className="p-10">
           <section className="max-w-5xl mx-auto">
             <div className="flex gap-8">

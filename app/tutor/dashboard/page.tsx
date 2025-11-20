@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Sidebar from "../../_components/sidebar";
 import { navigateData } from "../_components/navigatedata";
+import TopBar from "@/app/_components/topbar";
 export default function TutorDashboard() {
   const [upcomingSessions, setUpcomingSessions] = useState<
     Array<{
@@ -138,13 +139,7 @@ export default function TutorDashboard() {
     <div className="text-black flex min-h-screen bg-gray-100">
       <Sidebar chosenIndex={0} navigateData={navigateData} />
       <main className="flex-1">
-        <div className="w-full flex justify-between items-center px-6 py-8 bg-white shadow">
-          <h2 className="text-2xl font-bold">Tutor Dashboard</h2>
-          <div className="flex items-center gap-2">
-            <span className="text-gray-500">Tutor Name</span>
-            <span className="w-8 h-8 rounded-full bg-gray-300 inline-block"></span>
-          </div>
-        </div>
+        <TopBar username="Nguyen Van A" dashboardContent="Tutor Dashboard"></TopBar>
         <div className="p-10">
           <h3 className="text-lg font-semibold mb-4">Welcome back!</h3>
           <div className="mb-6">

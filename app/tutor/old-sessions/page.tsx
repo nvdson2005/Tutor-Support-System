@@ -1,5 +1,5 @@
 'use client';
-
+import TopBar from "@/app/_components/topbar";
 import { useState } from "react";
 import Sidebar from "../../_components/sidebar";
 import { navigateData } from "../_components/navigatedata";
@@ -38,13 +38,7 @@ export default function TutorOldSessions() {
     <div className="flex min-h-screen bg-gray-100 text-black">
       <Sidebar chosenIndex={3} navigateData={navigateData}/>
       <main className="flex-1">
-        <div className="w-full flex justify-between items-center px-6 py-8 bg-white shadow">
-          <h2 className="text-2xl font-bold">Tutor Dashboard</h2>
-          <div className="flex items-center gap-2">
-            <span className="text-gray-500">Tutor Name</span>
-            <span className="w-8 h-8 rounded-full bg-gray-300 inline-block"></span>
-          </div>
-        </div>
+        <TopBar username="Nguyen Van A" dashboardContent="Old Sessions"></TopBar>
         <div className="p-10">
           <section className="max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold mb-6 text-center border rounded-lg py-4 bg-white shadow" style={{borderColor:'#3b82f6', borderWidth:'2px'}}>Old Sessions</h3>
