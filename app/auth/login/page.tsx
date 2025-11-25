@@ -14,6 +14,10 @@ const adminAccount = {
   username: "admin",
   password: "1",
 };
+const coordinatorAccount = {
+  username : 'coordinator',
+  password : '1'
+}
 
 export default function Login() {
   const router = useRouter();
@@ -48,7 +52,14 @@ export default function Login() {
       password === adminAccount.password
     ) {
       router.push("/admin/tracking");
-    } else {
+    } else if (
+      username === coordinatorAccount.username &&
+      password === coordinatorAccount.password
+    ) 
+    {
+      router.push("/coordinator/dashboard")
+    }
+    else {
       alert("Invalid username or password");
     }
   };

@@ -1,286 +1,259 @@
 "use client";
-import TopBar from "@/app/_components/topbar";
-import React, { useState } from "react";
+
+import React from "react";
 import Sidebar from "@/app/_components/sidebar";
-import { useRouter } from "next/navigation";
-import { navigateData } from "@/app/admin/_components/navigatedata";
+import { navigateData } from "@/app/admin/_components/navigatedata"; // Giữ lại data điều hướng của bạn
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
+import { Doughnut, Bar } from "react-chartjs-2";
 
-// Sample student tracking data
-const studentTrackingData = [
-  {
-    studentId: "123456",
-    sessionId: "215323",
-    studentName: "Nguyen Van A",
-    sessionName: "Writing Report Tutorial",
-    participationStatus: "Participated",
-    lastUpdate: "5 mins ago",
+// 1. Đăng ký các thành phần biểu đồ
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
+
+// 2. Dữ liệu biểu đồ (Chuyển từ script HTML sang Object JS)
+const studentStatusData = {
+  labels: ["Completed", "Progressed", "Studying"],
+  datasets: [
+    {
+      data: [45, 30, 25],
+      backgroundColor: ["#2563eb", "#f59e0b", "#10b981"],
+      borderWidth: 0,
+    },
+  ],
+};
+
+const tutorTypeData = {
+  labels: ["Teacher Asst", "Lecturer", "Professor"],
+  datasets: [
+    {
+      data: [40, 40, 20],
+      backgroundColor: ["#3b82f6", "#4f46e5", "#dc2626"],
+      borderWidth: 0,
+    },
+  ],
+};
+
+const visitorData = {
+  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  datasets: [
+    {
+      label: "Visitors",
+      data: [300, 450, 600, 750, 550, 900, 800],
+      backgroundColor: "#3b82f6",
+      borderRadius: 4,
+      barThickness: 20,
+    },
+  ],
+};
+
+// Cấu hình biểu đồ (Options)
+const donutOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
   },
-  {
-    studentId: "123456",
-    sessionId: "215323",
-    studentName: "Nguyen Van A",
-    sessionName: "Introduction to Physics",
-    participationStatus: "Absent",
-    lastUpdate: "10 hours ago",
+  cutout: "70%",
+};
+
+const barOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
   },
-];
+  scales: {
+    y: {
+      beginAtZero: true,
+      display: false, // Ẩn trục Y như thiết kế
+    },
+    x: {
+      grid: { display: false },
+      border: { display: false },
+    },
+  },
+};
 
-export default function AdminTrackingPage() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All Statuses");
-  const [fromDate, setFromDate] = useState("2025-04-01");
-  const [toDate, setToDate] = useState("2025-04-01");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1;
-  const totalItems = studentTrackingData.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  const handleLogout = () => {
-    router.push("/auth/login");
-  };
-
-  const handleGetFeedback = (studentId: string, sessionId: string) => {
-    // Handle get feedback action
-    console.log("Get feedback for", studentId, sessionId);
-  };
-
-  const handleTrackProgress = (studentId: string, sessionId: string) => {
-    // Handle track progress action
-    console.log("Track progress for", studentId, sessionId);
-  };
-
-  const handleApplyFilters = () => {
-    // Handle filter application
-    console.log("Applying filters", { searchQuery, statusFilter, fromDate, toDate });
-  };
-
-  const getStatusBadgeClass = (status: string) => {
-    if (status === "Participated") {
-      return "bg-green-100 text-green-700";
-    } else if (status === "Absent") {
-      return "bg-red-100 text-red-700";
-    }
-    return "bg-gray-100 text-gray-700";
-  };
-
-  const paginatedData = studentTrackingData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
+export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-[#f4f7f9] font-sans">
+      {/* Sidebar - Sử dụng component có sẵn của bạn */}
       <Sidebar chosenIndex={0} navigateData={navigateData} />
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <TopBar username="Admin" dashboardContent="Tracking Dashboard" />
-        {/* Main Content Area */}
-        <div className="flex-1 p-8">
-          {/* Student Filters Section */}
-          <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Student Filters
-            </h2>
-            <div className="space-y-4">
-              {/* Search Bar */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Search Report/Student ID
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter Report ID, Student ID, or Keyword..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+      {/* Main Content Area */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        {/* Header */}
+        <header className="mb-8 flex justify-between items-center">
+          <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">
+            DASHBOARD
+          </h1>
+          <div className="flex items-center space-x-3">
+            <span className="text-lg font-medium text-gray-600">
+              ADMINISTRATOR NAME
+            </span>
+            {/* Avatar Placeholder */}
+            <div className="w-12 h-12 bg-gray-300 rounded-full border-2 border-indigo-500"></div>
+          </div>
+        </header>
+
+        {/* Khu vực Thống kê Chính */}
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Thẻ 1: Thống kê Sinh viên */}
+          <div className="bg-white rounded-xl shadow-sm p-6 col-span-1 border-t-4 border-indigo-500">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-bold text-gray-700">Students</h2>
+              {/* Icon SVG */}
+              <svg
+                className="w-8 h-8 text-indigo-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20v-2a3 3 0 00-5.356-1.857M10 12v6m6-6v6m4-12a4 4 0 11-8 0 4 4 0 018 0zm-8-4a4 4 0 11-8 0 4 4 0 018 0zm8-4a4 4 0 11-8 0 4 4 0 018 0z"
+                ></path>
+              </svg>
+            </div>
+            <p className="text-4xl font-extrabold text-indigo-600 mb-1">
+              20,107K
+            </p>
+            <p className="text-sm text-green-500 font-semibold mb-4">
+              ● Online: 9097
+            </p>
+            <p className="text-xs text-gray-500 mb-4">
+              Overall Completion Rate: 90%
+            </p>
+
+            {/* Biểu đồ Donut Sinh viên */}
+            <div className="flex items-center space-x-6">
+              <div className="w-20 h-20 relative">
+                <Doughnut data={studentStatusData} options={donutOptions} />
               </div>
-
-              {/* Filter Row */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Filter by Status */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Filter by Status (Checked-in, Absent)
-                  </label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option>All Statuses</option>
-                    <option>Participated</option>
-                    <option>Absent</option>
-                  </select>
+              <div className="text-sm space-y-1">
+                <div className="flex items-center">
+                  <span className="inline-block w-3 h-3 bg-blue-600 rounded-full mr-2"></span>
+                  Completed
                 </div>
+                <div className="flex items-center">
+                  <span className="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-2"></span>
+                  Progressed
+                </div>
+                <div className="flex items-center">
+                  <span className="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                  Studying
+                </div>
+              </div>
+            </div>
+          </div>
 
-                {/* Filter by Time */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Filter by time
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="date"
-                      value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <input
-                      type="date"
-                      value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+          {/* Thẻ 2: Thống kê Giảng viên */}
+          <div className="bg-white rounded-xl shadow-sm p-6 col-span-1 border-t-4 border-purple-500">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-bold text-gray-700">Tutors</h2>
+              {/* Icon SVG */}
+              <svg
+                className="w-8 h-8 text-purple-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H9a1 1 0 01-.877-.506l-2.071-3.62A3 3 0 016 14v-2c0-.528.208-1.033.582-1.41L12 5l5.418 5.59C17.792 11.467 18 11.972 18 12v2a3 3 0 01-1.052 2.374l-2.07 3.62A1 1 0 0115 21z"
+                ></path>
+              </svg>
+            </div>
+            <p className="text-4xl font-extrabold text-purple-600 mb-1">1000</p>
+            <p className="text-sm text-green-500 font-semibold mb-4">
+              ● Online: 723
+            </p>
+
+            {/* Biểu đồ Donut Giảng viên */}
+            <div className="flex items-center space-x-6 mt-6">
+              <div className="w-20 h-20 relative">
+                <Doughnut data={tutorTypeData} options={donutOptions} />
+              </div>
+              <div className="text-sm space-y-1">
+                <div className="flex items-center">
+                  <span className="inline-block w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
+                  Teacher Asst
+                </div>
+                <div className="flex items-center">
+                  <span className="inline-block w-3 h-3 bg-indigo-700 rounded-full mr-2"></span>
+                  Lecturer
+                </div>
+                <div className="flex items-center">
+                  <span className="inline-block w-3 h-3 bg-red-600 rounded-full mr-2"></span>
+                  Professor
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Thẻ 3: Trending Courses */}
+          <div className="bg-white rounded-xl shadow-sm p-6 col-span-1 border-t-4 border-teal-500">
+            <h2 className="text-xl font-bold text-gray-700 mb-4">
+              TRENDING COURSES
+            </h2>
+
+            <div className="space-y-4">
+              {[
+                { name: "DSA", percent: "85%" },
+                { name: "Analysis 1", percent: "78%" },
+                { name: "Analysis 2", percent: "72%" },
+                { name: "Discrete Math", percent: "65%" },
+              ].map((course, index) => (
+                <div key={index} className="flex items-center">
+                  <span className="w-1/3 text-sm text-gray-600 font-medium">
+                    {course.name} :
+                  </span>
+                  <div className="flex-1 h-3 bg-teal-100 rounded-full overflow-hidden">
+                    <div
+                      className="bg-teal-500 h-3 rounded-full transition-all duration-500"
+                      style={{ width: course.percent }}
+                    ></div>
                   </div>
                 </div>
-
-                {/* Apply Filters Button */}
-                <div className="flex items-end">
-                  <button
-                    onClick={handleApplyFilters}
-                    className="w-full bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800 font-medium"
-                  >
-                    Apply Filters
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Student Tracking List Section */}
-          <section className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Student Tracking List
-            </h2>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      STUDENT ID
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      SESSION ID
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      STUDENT NAME
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      SESSION NAME
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      PARTICIPATION STATUS
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      LAST UPDATE
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                      ACTIONS
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedData.map((student, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-100 hover:bg-gray-50"
-                    >
-                      <td className="py-4 px-4 text-gray-700">
-                        {student.studentId}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {student.sessionId}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {student.studentName}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {student.sessionName}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass(
-                            student.participationStatus
-                          )}`}
-                        >
-                          {student.participationStatus}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {student.lastUpdate}
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="flex gap-3">
-                          <button
-                            onClick={() =>
-                              handleGetFeedback(
-                                student.studentId,
-                                student.sessionId
-                              )
-                            }
-                            className="text-blue-600 hover:text-blue-800 underline text-sm"
-                          >
-                            Get Feedback
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleTrackProgress(
-                                student.studentId,
-                                student.sessionId
-                              )
-                            }
-                            className="text-blue-600 hover:text-blue-800 underline text-sm"
-                          >
-                            Track progress
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* Khu vực Biểu đồ Chi tiết (Visitors) */}
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-700">VISITORS</h2>
+              <button className="text-indigo-600 text-sm font-medium hover:text-indigo-800 transition-colors">
+                View more
+              </button>
             </div>
-
-            {/* Pagination */}
-            <div className="mt-6 flex justify-end items-center gap-4">
-              <span className="text-sm text-gray-600">
-                Showing {(currentPage - 1) * itemsPerPage + 1} -{" "}
-                {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}{" "}
-                reports
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                >
-                  &lt; Prev
-                </button>
-                <button
-                  className="px-4 py-2 bg-blue-900 text-white rounded-md text-sm font-medium"
-                >
-                  {currentPage}
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                >
-                  Next &gt;
-                </button>
-              </div>
+            {/* Vùng chứa biểu đồ cột */}
+            <div className="h-64 w-full">
+              <Bar data={visitorData} options={barOptions} />
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </main>
     </div>
   );
 }
-

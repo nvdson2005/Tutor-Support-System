@@ -1,358 +1,272 @@
 "use client";
-import TopBar from "@/app/_components/topbar";
+
 import React, { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
-import { useRouter } from "next/navigation";
 import { navigateData } from "@/app/admin/_components/navigatedata";
 
-// Sample feedback data
-const recentFeedbacks = [
+// 1. Mock Data (Translated to English)
+const studentsData = [
   {
-    studentId: "2300015",
-    studentName: "Phan Van An",
-    course: "Python Programming",
-    rating: 4.5,
-    comment: "The course is great!",
-    recentlyActivity: "Just now",
+    id: "2300015",
+    name: "Phan Van An",
+    dept: "Computer Science",
+    logins: 75,
+    courses: 5,
+    progress: 92,
+    lastActive: "25/10/2024",
+    statusColor: "indigo",
   },
   {
-    studentId: "2300015",
-    studentName: "Phan Van An",
-    course: "Python Programming",
-    rating: 2.0,
-    comment: "I don't like it",
-    recentlyActivity: "1 day ago",
+    id: "2300016",
+    name: "Nguyen Thanh Bao",
+    dept: "Mechanical Eng.",
+    logins: 68,
+    courses: 4,
+    progress: 45,
+    lastActive: "20/10/2024",
+    statusColor: "red",
+  },
+  {
+    id: "2300017",
+    name: "Do Thanh Cong",
+    dept: "Civil Eng.",
+    logins: 150,
+    courses: 7,
+    progress: 88,
+    lastActive: "26/10/2024",
+    statusColor: "emerald",
+  },
+  {
+    id: "2300018",
+    name: "Le Thi Duyen",
+    dept: "Computer Science",
+    logins: 90,
+    courses: 6,
+    progress: 75,
+    lastActive: "24/10/2024",
+    statusColor: "indigo",
+  },
+  {
+    id: "2300019",
+    name: "Tran Van Em",
+    dept: "Electrical - Electronic",
+    logins: 45,
+    courses: 3,
+    progress: 30,
+    lastActive: "15/10/2024",
+    statusColor: "red",
   },
 ];
 
-// Department satisfaction data
-const departmentData = [
-  { name: "CNTT", score: 4.7 },
-  { name: "Cơ khí", score: 4.2 },
-  { name: "Xây dựng", score: 3.8 },
-  { name: "Điện", score: 4.3 },
-];
-
-export default function AdminReportsPage() {
-  const router = useRouter();
+export default function StudentEngagementPage() {
+  const [semester, setSemester] = useState("2024 - 1");
+  const [department, setDepartment] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All Statuses");
-  const [categoryFilter, setCategoryFilter] = useState("All Categories");
 
-  const handleApplyFilters = () => {
-    console.log("Applying filters", {
-      searchQuery,
-      statusFilter,
-      categoryFilter,
-    });
+  const handleExport = () => {
+    alert("Exporting student data to CSV...");
   };
-
-  const getRatingColor = (rating: number) => {
-    if (rating >= 4.0) return "text-green-600";
-    if (rating >= 3.0) return "text-yellow-600";
-    return "text-red-600";
-  };
-
-  // Donut chart data
-  const donutData = [
-    { label: "Positive", percentage: 80, color: "#10b981" },
-    { label: "Neutral", percentage: 15, color: "#f59e0b" },
-    { label: "Negative", percentage: 5, color: "#ef4444" },
-  ];
-
-  // Calculate donut chart paths
-  const outerRadius = 60;
-  const innerRadius = 35;
-  const centerX = 80;
-  const centerY = 80;
-  let currentAngle = -90; // Start from top
-
-  const donutPaths = donutData.map((segment) => {
-    const angle = (segment.percentage / 100) * 360;
-    const startAngle = currentAngle;
-    const endAngle = currentAngle + angle;
-
-    const startAngleRad = (startAngle * Math.PI) / 180;
-    const endAngleRad = (endAngle * Math.PI) / 180;
-
-    const x1 = centerX + outerRadius * Math.cos(startAngleRad);
-    const y1 = centerY + outerRadius * Math.sin(startAngleRad);
-    const x2 = centerX + outerRadius * Math.cos(endAngleRad);
-    const y2 = centerY + outerRadius * Math.sin(endAngleRad);
-
-    const x3 = centerX + innerRadius * Math.cos(endAngleRad);
-    const y3 = centerY + innerRadius * Math.sin(endAngleRad);
-    const x4 = centerX + innerRadius * Math.cos(startAngleRad);
-    const y4 = centerY + innerRadius * Math.sin(startAngleRad);
-
-    const largeArcFlag = angle > 180 ? 1 : 0;
-
-    const path = `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4} Z`;
-
-    currentAngle = endAngle;
-
-    return {
-      path,
-      color: segment.color,
-      label: segment.label,
-      percentage: segment.percentage,
-    };
-  });
-
-  // Bar chart calculations
-  const maxScore = 5.0;
-  const barMaxHeight = 120;
-  const barWidth = 50;
-  const barSpacing = 60;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-[#f4f7f9] font-sans">
+      {/* Sidebar - Keeping the original component */}
       <Sidebar chosenIndex={1} navigateData={navigateData} />
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <TopBar username="Admin" dashboardContent="Reports Dashboard" />
+      <main className="flex-1 p-8 overflow-y-auto h-screen">
+        
+        {/* Header */}
+        <header className="mb-8 border-b border-gray-200 pb-4 flex justify-between items-center">
+          <h1 className="text-3xl font-extrabold text-gray-800">
+            STUDENT ENGAGEMENT REPORT
+          </h1>
+          <div className="text-gray-500 text-sm font-medium">
+            ADMINISTRATOR NAME
+          </div>
+        </header>
 
-        {/* Main Content Area */}
-        <div className="flex-1 p-8">
-          {/* Report Queue Filters Section */}
-          <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Report Queue Filters
-            </h2>
-            <div className="flex flex-wrap gap-4 items-end">
-              {/* Search Input */}
-              <div className="flex-1 min-w-[250px]">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Search Report/Student ID
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter Report ID, Student ID, or Keyword..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Filter by Status */}
-              <div className="min-w-[180px]">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Filter by Status
+        {/* Filters & Controls */}
+        <section className="bg-white p-6 rounded-xl shadow-sm mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-end md:items-center space-y-4 md:space-y-0 md:space-x-4">
+            
+            {/* Main Filters */}
+            <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 w-full md:w-auto">
+              {/* Semester Filter */}
+              <div className="flex flex-col">
+                <label htmlFor="semester" className="text-sm font-medium text-gray-500 mb-1">
+                  Semester
                 </label>
                 <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="semester"
+                  value={semester}
+                  onChange={(e) => setSemester(e.target.value)}
+                  className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-48 outline-none"
                 >
-                  <option>All Statuses</option>
-                  <option>Pending</option>
-                  <option>Approved</option>
-                  <option>Rejected</option>
+                  <option value="2024 - 1">2024 - 1 (Selected)</option>
+                  <option value="2023 - 2">2023 - 2</option>
+                  <option value="2023 - 1">2023 - 1</option>
                 </select>
               </div>
 
-              {/* Filter by Category */}
-              <div className="min-w-[180px]">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Filter by Category
+              {/* Department Filter */}
+              <div className="flex flex-col">
+                <label htmlFor="department" className="text-sm font-medium text-gray-500 mb-1">
+                  Faculty/Department
                 </label>
                 <select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="department"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-64 outline-none"
                 >
-                  <option>All Categories</option>
-                  <option>Course Feedback</option>
-                  <option>Session Feedback</option>
-                  <option>General Feedback</option>
+                  <option value="All">All Faculties</option>
+                  <option value="CNTT">Computer Science & Eng.</option>
+                  <option value="CK">Mechanical Engineering</option>
+                  <option value="XD">Civil Engineering</option>
                 </select>
-              </div>
-
-              {/* Apply Filters Button */}
-              <div>
-                <button
-                  onClick={handleApplyFilters}
-                  className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800 font-medium"
-                >
-                  Apply Filters
-                </button>
               </div>
             </div>
-          </section>
 
-          {/* Dashboard Cards Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Overall Course Satisfaction Card */}
-            <section className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Overall Course Satisfaction
-                </h2>
-                <span className="text-2xl">😊</span>
-              </div>
-              <div className="text-4xl font-bold text-green-600 mb-2">
-                4.5 / 5.0
-              </div>
-              <div className="text-sm text-gray-500 mb-6">
-                Base on 5200 recently rate
-              </div>
-              <div className="flex items-center justify-center gap-8">
-                {/* Donut Chart */}
-                <div className="relative">
-                  <svg width="160" height="160" viewBox="0 0 160 160">
-                    {donutPaths.map((segment, index) => (
-                      <path
-                        key={index}
-                        d={segment.path}
-                        fill={segment.color}
-                        stroke="white"
-                        strokeWidth="1"
-                      />
-                    ))}
-                  </svg>
-                </div>
-                {/* Legend */}
-                <div className="space-y-3">
-                  {donutData.map((item, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: item.color }}
-                      ></div>
-                      <span className="text-sm text-gray-700">
-                        {item.label} ({item.percentage}%)
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
+            {/* Export Button */}
+            <button
+              onClick={handleExport}
+              className="bg-[#4CAF50] hover:bg-[#45a049] text-white font-semibold py-2.5 px-6 rounded-lg shadow-md transition-colors duration-200 w-full md:w-auto"
+            >
+              Export CSV
+            </button>
+          </div>
+        </section>
 
-            {/* Response by Department Card */}
-            <section className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                REPONSE BY DEPARTMENT
-              </h2>
-              <div className="mb-4">
-                {/* Bar Chart */}
-                <div className="relative h-40 mb-2">
-                  {/* Y-axis labels */}
-                  <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 pr-2">
-                    <span>5.0</span>
-                    <span>2.75</span>
-                    <span>0.5</span>
-                  </div>
-                  {/* Bars */}
-                  <div className="ml-8 flex items-end justify-center gap-4 h-full">
-                    {departmentData.map((dept, index) => {
-                      const barHeight = (dept.score / maxScore) * barMaxHeight;
-                      return (
-                        <div key={index} className="flex flex-col items-center h-full">
-                          <div className="relative w-12 flex items-end h-full">
-                            <div
-                              className="bg-blue-600 rounded-t w-full"
-                              style={{
-                                height: `${barHeight}px`,
-                              }}
-                            ></div>
-                            <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 whitespace-nowrap">
-                              {dept.score.toFixed(1)}
-                            </div>
-                          </div>
-                          <div className="text-xs text-gray-600 mt-2">
-                            {dept.name}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div className="text-xs text-gray-600 text-center mt-2">
-                  Điểm Hài lòng TB
-                </div>
-              </div>
-              <div className="text-sm text-gray-500 mt-4">
-                The chart illustrate the satisfaction rate for every Department
-              </div>
-            </section>
+        {/* Summary KPIs */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-indigo-500">
+            <p className="text-sm font-medium text-gray-500">Active Students</p>
+            <p className="text-3xl font-bold text-gray-800 mt-1">2,450</p>
+          </div>
+          <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-emerald-500">
+            <p className="text-sm font-medium text-gray-500">Avg. Active Time</p>
+            <p className="text-3xl font-bold text-gray-800 mt-1">18.5 hours</p>
+          </div>
+          <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-yellow-500">
+            <p className="text-sm font-medium text-gray-500">Avg. Completion Rate</p>
+            <p className="text-3xl font-bold text-gray-800 mt-1">82%</p>
+          </div>
+        </section>
+
+        {/* Detailed Data Table */}
+        <section className="bg-white p-6 rounded-xl shadow-lg">
+          <h2 className="text-xl font-bold text-gray-700 mb-4">
+            Student Engagement Details
+          </h2>
+          
+          {/* Search Bar */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search by Student ID or Name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="p-2 rounded-lg border border-[#e0e7ff] bg-[#f9faff] shadow-sm w-full md:w-1/3 outline-none focus:ring-2 focus:ring-indigo-200"
+            />
           </div>
 
-          {/* Recent Feedbacks Section */}
-          <section className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-800">
-                RECENT FEEDBACKS
-              </h2>
-              <button className="text-blue-600 hover:text-blue-800 underline text-sm">
-                View detailed activity
+          <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-[#e0e7ff]">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Student ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Full Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Faculty
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Total Logins
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Courses
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Avg. Progress
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                    Last Active
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-600">
+                {studentsData.map((student, index) => (
+                  <tr key={index} className="hover:bg-[#f1f5f9] transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      {student.id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {student.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {student.dept}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      {student.logins}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      {student.courses}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="w-full flex items-center">
+                        <div className="w-24 bg-gray-200 rounded-full h-2.5 mr-2">
+                          <div
+                            className={`h-2.5 rounded-full ${
+                              student.statusColor === "indigo" ? "bg-indigo-500" :
+                              student.statusColor === "red" ? "bg-red-500" : "bg-emerald-500"
+                            }`}
+                            style={{ width: `${student.progress}%` }}
+                          ></div>
+                        </div>
+                        <span className={`text-xs font-semibold ${
+                           student.statusColor === "indigo" ? "text-indigo-700" :
+                           student.statusColor === "red" ? "text-red-700" : "text-emerald-700"
+                        }`}>
+                          {student.progress}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {student.lastActive}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+            <span>Showing 1 - 5 of 2,450 results</span>
+            <div className="flex space-x-2">
+              <button className="px-3 py-1 border rounded-lg hover:bg-gray-100 disabled:opacity-50" disabled>
+                &lt; Previous
+              </button>
+              <button className="px-3 py-1 border rounded-lg bg-indigo-500 text-white">
+                1
+              </button>
+              <button className="px-3 py-1 border rounded-lg hover:bg-gray-100">
+                2
+              </button>
+              <button className="px-3 py-1 border rounded-lg hover:bg-gray-100">
+                3
+              </button>
+              <button className="px-3 py-1 border rounded-lg hover:bg-gray-100">
+                Next &gt;
               </button>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-blue-600 text-white">
-                    <th className="text-left py-3 px-4 font-semibold">
-                      STUDENT ID
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold">
-                      STUDENT NAME
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold">
-                      COURSE
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold">
-                      RATING
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold">
-                      RATING (Comment)
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold">
-                      RECENTLY ACTIVITY
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentFeedbacks.map((feedback, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-100 hover:bg-gray-50"
-                    >
-                      <td className="py-4 px-4 text-gray-700">
-                        {feedback.studentId}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {feedback.studentName}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {feedback.course}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`font-semibold ${getRatingColor(
-                            feedback.rating
-                          )}`}
-                        >
-                          {feedback.rating}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {feedback.comment}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {feedback.recentlyActivity}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
+          </div>
+        </section>
+
       </main>
     </div>
   );
 }
-
