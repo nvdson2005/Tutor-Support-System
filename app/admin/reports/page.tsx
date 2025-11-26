@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
 import { navigateData } from "@/app/admin/_components/navigatedata";
-
+import TopBar from "@/app/_components/topbar";
 // 1. Mock Data (Translated to English)
 const studentsData = [
   {
@@ -123,239 +123,238 @@ export default function StudentEngagementPage() {
     alert("Exporting student data to CSV...");
   };
 
+  // ... (Các phần imports và logic giữ nguyên)
+
   return (
-    <div className="flex min-h-screen bg-[#f4f7f9] font-sans">
-      {/* Sidebar - Keeping the original component */}
+    <div className="flex h-screen bg-[#f4f7f9] font-sans overflow-hidden">
+      {/* 1. Sidebar giữ nguyên */}
       <Sidebar chosenIndex={1} navigateData={navigateData} />
 
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto h-screen">
-        {/* Header */}
-        <header className="mb-8 border-b border-gray-200 pb-4 flex justify-between items-center">
-          <h1 className="text-3xl font-extrabold text-gray-800">
-            STUDENT ENGAGEMENT REPORT
-          </h1>
-          <div className="text-gray-500 text-sm font-medium">
-            ADMINISTRATOR NAME
-          </div>
-        </header>
+      {/* 2. Wrapper cho toàn bộ phần bên phải Sidebar */}
+      <div className="flex-1 flex flex-col h-screen">
+        
+        {/* TopBar nằm ở đây: Sẽ sát trên cùng và sát Sidebar */}
+        <TopBar username="Admin" dashboardContent="Reports Engagement" />
 
-        {/* Filters & Controls */}
-        <section className="bg-white p-6 rounded-xl shadow-sm mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-end md:items-center space-y-4 md:space-y-0 md:space-x-4">
-            {/* Main Filters */}
-            <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 w-full md:w-auto">
-              {/* Semester Filter */}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="semester"
-                  className="text-sm font-medium text-gray-500 mb-1"
-                >
-                  Semester
-                </label>
-                <select
-                  id="semester"
-                  value={semester}
-                  onChange={(e) => setSemester(e.target.value)}
-                  className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-48 outline-none"
-                >
-                  <option value="2024 - 1">2024 - 1 (Selected)</option>
-                  <option value="2023 - 2">2023 - 2</option>
-                  <option value="2023 - 1">2023 - 1</option>
-                </select>
-              </div>
+        {/* 3. Khu vực nội dung chính: Có padding và thanh cuộn riêng */}
+        <main className="flex-1 p-8 overflow-y-auto">
+          
+          {/* Filters & Controls */}
+          <section className="bg-white p-6 rounded-xl shadow-sm mb-8">
+             {/* ... (Giữ nguyên nội dung bên trong) ... */}
+             <div className="flex flex-col md:flex-row justify-between items-end md:items-center space-y-4 md:space-y-0 md:space-x-4">
+                {/* Main Filters */}
+                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 w-full md:w-auto">
+                  {/* Semester Filter */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="semester"
+                      className="text-sm font-medium text-gray-500 mb-1"
+                    >
+                      Semester
+                    </label>
+                    <select
+                      id="semester"
+                      value={semester}
+                      onChange={(e) => setSemester(e.target.value)}
+                      className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-48 outline-none"
+                    >
+                      <option value="2024 - 1">2024 - 1 (Selected)</option>
+                      <option value="2023 - 2">2023 - 2</option>
+                      <option value="2023 - 1">2023 - 1</option>
+                    </select>
+                  </div>
 
-              {/* Department Filter */}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="department"
-                  className="text-sm font-medium text-gray-500 mb-1"
+                  {/* Department Filter */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="department"
+                      className="text-sm font-medium text-gray-500 mb-1"
+                    >
+                      Faculty/Department
+                    </label>
+                    <select
+                      id="department"
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-64 outline-none"
+                    >
+                      <option value="All">All Faculties</option>
+                      <option value="CNTT">Computer Science & Eng.</option>
+                      <option value="CK">Mechanical Engineering</option>
+                      <option value="XD">Civil Engineering</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Export Button */}
+                <button
+                  onClick={handleExport}
+                  className="bg-[#4CAF50] hover:bg-[#45a049] text-white font-semibold py-2.5 px-6 rounded-lg shadow-md transition-colors duration-200 w-full md:w-auto"
                 >
-                  Faculty/Department
-                </label>
-                <select
-                  id="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-64 outline-none"
-                >
-                  <option value="All">All Faculties</option>
-                  <option value="CNTT">Computer Science & Eng.</option>
-                  <option value="CK">Mechanical Engineering</option>
-                  <option value="XD">Civil Engineering</option>
-                </select>
+                  Export CSV
+                </button>
               </div>
+          </section>
+
+          {/* Summary KPIs */}
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-indigo-500">
+              <p className="text-sm font-medium text-gray-500">Active Students</p>
+              <p className="text-3xl font-bold text-gray-800 mt-1">2,450</p>
+            </div>
+            <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-emerald-500">
+              <p className="text-sm font-medium text-gray-500">
+                Avg. Active Time
+              </p>
+              <p className="text-3xl font-bold text-gray-800 mt-1">18.5 hours</p>
+            </div>
+            <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-yellow-500">
+              <p className="text-sm font-medium text-gray-500">
+                Avg. Completion Rate
+              </p>
+              <p className="text-3xl font-bold text-gray-800 mt-1">82%</p>
+            </div>
+          </section>
+
+          {/* Detailed Data Table */}
+          <section className="bg-white p-6 rounded-xl shadow-lg">
+            <h2 className="text-xl font-bold text-gray-700 mb-4">
+              Student Engagement Details
+            </h2>
+
+            {/* Search Bar */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Search by Student ID or Name..."
+                onChange={(e) => filteredStudents(e.target.value)}
+                className="text-black p-2 rounded-lg border border-[#e0e7ff] bg-[#f9faff] shadow-sm w-full md:w-1/3 outline-none focus:ring-2 focus:ring-indigo-200"
+              />
             </div>
 
-            {/* Export Button */}
-            <button
-              onClick={handleExport}
-              className="bg-[#4CAF50] hover:bg-[#45a049] text-white font-semibold py-2.5 px-6 rounded-lg shadow-md transition-colors duration-200 w-full md:w-auto"
-            >
-              Export CSV
-            </button>
-          </div>
-        </section>
-
-        {/* Summary KPIs */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-indigo-500">
-            <p className="text-sm font-medium text-gray-500">Active Students</p>
-            <p className="text-3xl font-bold text-gray-800 mt-1">2,450</p>
-          </div>
-          <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-emerald-500">
-            <p className="text-sm font-medium text-gray-500">
-              Avg. Active Time
-            </p>
-            <p className="text-3xl font-bold text-gray-800 mt-1">18.5 hours</p>
-          </div>
-          <div className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-yellow-500">
-            <p className="text-sm font-medium text-gray-500">
-              Avg. Completion Rate
-            </p>
-            <p className="text-3xl font-bold text-gray-800 mt-1">82%</p>
-          </div>
-        </section>
-
-        {/* Detailed Data Table */}
-        <section className="bg-white p-6 rounded-xl shadow-lg">
-          <h2 className="text-xl font-bold text-gray-700 mb-4">
-            Student Engagement Details
-          </h2>
-
-          {/* Search Bar */}
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Search by Student ID or Name..."
-              onChange={(e) => filteredStudents(e.target.value)}
-              className="text-black p-2 rounded-lg border border-[#e0e7ff] bg-[#f9faff] shadow-sm w-full md:w-1/3 outline-none focus:ring-2 focus:ring-indigo-200"
-            />
-          </div>
-
-          <div className="overflow-x-auto rounded-lg border border-gray-200">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-[#e0e7ff]">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Student ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Full Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Faculty
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Total Logins
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Courses
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Avg. Progress
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
-                    Last Active
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-600">
-                {sliceStudents.map((student, index) => (
-                  <tr
-                    key={index}
-                    className="hover:bg-[#f1f5f9] transition-colors"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                      {student.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {student.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {student.dept}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      {student.logins}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      {student.courses}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="w-full flex items-center">
-                        <div className="w-24 bg-gray-200 rounded-full h-2.5 mr-2">
-                          <div
-                            className={`h-2.5 rounded-full ${
-                              student.statusColor === "indigo"
-                                ? "bg-indigo-500"
-                                : student.statusColor === "red"
-                                ? "bg-red-500"
-                                : "bg-emerald-500"
-                            }`}
-                            style={{ width: `${student.progress}%` }}
-                          ></div>
-                        </div>
-                        <span
-                          className={`text-xs font-semibold ${
-                            student.statusColor === "indigo"
-                              ? "text-indigo-700"
-                              : student.statusColor === "red"
-                              ? "text-red-700"
-                              : "text-emerald-700"
-                          }`}
-                        >
-                          {student.progress}%
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {student.lastActive}
-                    </td>
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-[#e0e7ff]">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Student ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Full Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Faculty
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Total Logins
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Courses
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Avg. Progress
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">
+                      Last Active
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
-            <span>
-              Showing {sliceStudents.length} of {studentsData.length} results
-            </span>
-            <div className="flex space-x-2">
-              <button
-                className="px-3 py-1 border rounded-lg hover:bg-gray-100 disabled:opacity-50"
-                disabled={currentPage === 1}
-                onClick={() => {
-                  setCurrentPage(currentPage - 1);
-                  // Fetch new data for the previous page
-                  setSliceStudents(
-                    studentsData.slice(
-                      (currentPage - 2) * studentPerPage,
-                      (currentPage - 1) * studentPerPage
-                    )
-                  );
-                }}
-              >
-                &lt; Previous
-              </button>
-              <span className="px-3 py-1 border rounded-lg bg-gray-200">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                className="px-3 py-1 border rounded-lg hover:bg-gray-100"
-                onClick={() => {
-                  setCurrentPage(currentPage + 1);
-                  setSliceStudents(studentsData.slice(currentPage * studentPerPage, (currentPage + 1) * studentPerPage));
-                }}
-                disabled={currentPage === totalPages}
-              >
-                Next &gt;
-              </button>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100 text-sm text-gray-600">
+                  {sliceStudents.map((student, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-[#f1f5f9] transition-colors"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                        {student.id}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {student.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {student.dept}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        {student.logins}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        {student.courses}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="w-full flex items-center">
+                          <div className="w-24 bg-gray-200 rounded-full h-2.5 mr-2">
+                            <div
+                              className={`h-2.5 rounded-full ${
+                                student.statusColor === "indigo"
+                                  ? "bg-indigo-500"
+                                  : student.statusColor === "red"
+                                  ? "bg-red-500"
+                                  : "bg-emerald-500"
+                              }`}
+                              style={{ width: `${student.progress}%` }}
+                            ></div>
+                          </div>
+                          <span
+                            className={`text-xs font-semibold ${
+                              student.statusColor === "indigo"
+                                ? "text-indigo-700"
+                                : student.statusColor === "red"
+                                ? "text-red-700"
+                                : "text-emerald-700"
+                            }`}
+                          >
+                            {student.progress}%
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {student.lastActive}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>
-        </section>
-      </main>
+
+            {/* Pagination */}
+            <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+              <span>
+                Showing {sliceStudents.length} of {studentsData.length} results
+              </span>
+              <div className="flex space-x-2">
+                <button
+                  className="px-3 py-1 border rounded-lg hover:bg-gray-100 disabled:opacity-50"
+                  disabled={currentPage === 1}
+                  onClick={() => {
+                    setCurrentPage(currentPage - 1);
+                    setSliceStudents(
+                      studentsData.slice(
+                        (currentPage - 2) * studentPerPage,
+                        (currentPage - 1) * studentPerPage
+                      )
+                    );
+                  }}
+                >
+                  &lt; Previous
+                </button>
+                <span className="px-3 py-1 border rounded-lg bg-gray-200">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  className="px-3 py-1 border rounded-lg hover:bg-gray-100"
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1);
+                    setSliceStudents(studentsData.slice(currentPage * studentPerPage, (currentPage + 1) * studentPerPage));
+                  }}
+                  disabled={currentPage === totalPages}
+                >
+                  Next &gt;
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
-  );
-}
+  )};

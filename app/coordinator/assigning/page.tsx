@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
 import { navigateData } from "../_component/navigatedata";
+import TopBar  from "@/app/_components/topbar";
 // --- MOCK DATA ---
 
 // 1. Navigation Data (Restricted to Dashboard & Assigning as requested)
@@ -107,22 +108,9 @@ export default function CoordinatorAssignPage() {
       {/* SIDEBAR: Using the specific menu items requested */}
       <Sidebar chosenIndex={1} navigateData={navigateData} />
 
-      {/* MAIN CONTENT AREA */}
-      <main className="flex-1 p-8 overflow-y-auto h-screen">
-        
-        {/* HEADER */}
-        <header className="mb-8 flex justify-between items-center">
-          <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">
-            TUTOR & STUDENT ASSIGNMENT
-          </h1>
-          <div className="flex items-center space-x-3">
-            <span className="text-lg font-medium text-gray-600">
-              COORDINATOR NAME
-            </span>
-            {/* Avatar Placeholder */}
-            <div className="w-12 h-12 bg-gray-300 rounded-full border-2 border-indigo-500"></div>
-          </div>
-        </header>
+            <main className="flex-1 flex flex-col">
+              {/* Top Header */}
+              <TopBar username="Coordinator" dashboardContent="Assigning Page" />
 
         {/* FILTERS SECTION */}
         <section className="bg-white p-6 rounded-xl shadow-md mb-8">

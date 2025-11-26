@@ -23,14 +23,12 @@ ChartJS.register(
   LinearScale,
   BarElement
 );
+import TopBar  from "@/app/_components/topbar";
 
 // --- 2. DATA ĐỊNH NGHĨA LẠI (QUAN TRỌNG: Đã sửa key thành label/path) ---
 
 // Menu riêng cho Coordinator (Chỉ 2 tab, bỏ User Management)
-const coordinatorNavData = [
-  { label: "DASHBOARD", path: "/coordinator/dashboard" }, 
-  { label: "REPORTS", path: "/coordinator/reports" },
-];
+
 
 // Dữ liệu Queue (Cột 1)
 const actionQueueData = [
@@ -147,21 +145,9 @@ export default function CoordinatorDashboard() {
       */}
       <Sidebar chosenIndex={0} navigateData={navigateData} />
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 p-8 overflow-y-auto h-screen">
-        
-        {/* HEADER */}
-        <header className="mb-8 flex justify-between items-center">
-          <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">
-            DASHBOARD - COORDINATOR
-          </h1>
-          <div className="flex items-center space-x-3">
-            <span className="text-lg font-medium text-gray-600">
-              COORDINATOR NAME
-            </span>
-            <div className="w-12 h-12 bg-gray-300 rounded-full border-2 border-indigo-500"></div>
-          </div>
-        </header>
+            <main className="flex-1 flex flex-col">
+              {/* Top Header */}
+              <TopBar username="Coordinator" dashboardContent="Main Dashboard" />
 
         {/* SECTION 1: TOP CARDS */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
