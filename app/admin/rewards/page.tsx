@@ -1,8 +1,7 @@
 "use client";
 import TopBar from "@/app/_components/topbar";
-import React, { useState } from "react";
+import { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
-import { useRouter } from "next/navigation";
 import { navigateData } from "@/app/admin/_components/navigatedata";
 
 // Sample students data
@@ -22,13 +21,12 @@ const studentsData = [
 ];
 
 export default function AdminRewardsPage() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [fromDate, setFromDate] = useState("2025-04-01");
   const [toDate, setToDate] = useState("2025-04-01");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1;
+  const itemsPerPage = 5;
   const totalItems = studentsData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -63,18 +61,12 @@ export default function AdminRewardsPage() {
     currentPage * itemsPerPage
   );
 
-  // Create uppercase navigation data for sidebar
-  const uppercaseNavigateData = navigateData.map((item) => ({
-    ...item,
-    label: item.label.toUpperCase(),
-  }));
-
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex text-black min-h-screen bg-gray-50">
       {/* Sidebar */}
       <Sidebar
         chosenIndex={2}
-        navigateData={uppercaseNavigateData}
+        navigateData={navigateData}
         logoutLabel="LOG OUT"
       />
 
