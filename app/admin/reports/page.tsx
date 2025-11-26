@@ -19,7 +19,7 @@ const studentsData = [
   {
     id: "2300016",
     name: "Nguyen Thanh Bao",
-    dept: "Mechanical Eng.",
+    dept: "Mechanical Engineering",
     logins: 68,
     courses: 4,
     progress: 45,
@@ -29,7 +29,7 @@ const studentsData = [
   {
     id: "2300017",
     name: "Do Thanh Cong",
-    dept: "Civil Eng.",
+    dept: "Civil Engineering",
     logins: 150,
     courses: 7,
     progress: 88,
@@ -59,7 +59,7 @@ const studentsData = [
   {
     id: "2300020",
     name: "Hoang Thi Phuong",
-    dept: "Mechanical Eng.",
+    dept: "Mechanical Engineering",
     logins: 120,
     courses: 8,
     progress: 95,
@@ -69,7 +69,7 @@ const studentsData = [
   {
     id: "2300021",
     name: "Vu Van Hung",
-    dept: "Civil Eng.",
+    dept: "Civil Engineering",
     logins: 80,
     courses: 5,
     progress: 60,
@@ -108,13 +108,25 @@ export default function StudentEngagementPage() {
   const [semester, setSemester] = useState("2024 - 1");
   const [department, setDepartment] = useState("All");
 
-  const filteredStudents = (query: string) => {
+  const filteredStudentsBySearch = (query: string) => {
     if (!query) {
       setSliceStudents(studentsData.slice(0, studentPerPage));
       return
     }
     const filtered = studentsData.filter((student) =>
-      student.name.toLowerCase().includes(query.toLowerCase())
+      student.name.toLowerCase().includes(query.toLowerCase()) || student.id.includes(query)
+    );
+    setSliceStudents(filtered.slice(0, studentPerPage));
+  };
+
+  const filteredStudentsByDept = (dept: string) => {
+    setDepartment(dept);
+    if (dept === "All") {
+      setSliceStudents(studentsData.slice(0, studentPerPage));
+      return;
+    }
+    const filtered = studentsData.filter(
+      (student) => student.dept === dept
     );
     setSliceStudents(filtered.slice(0, studentPerPage));
   };
@@ -176,13 +188,16 @@ export default function StudentEngagementPage() {
                     <select
                       id="department"
                       value={department}
-                      onChange={(e) => setDepartment(e.target.value)}
+                      onChange={(e) => 
+                        filteredStudentsByDept(e.target.value)
+                      }
                       className="p-2.5 rounded-lg border border-[#e0e7ff] bg-[#f9faff] text-indigo-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-64 outline-none"
                     >
                       <option value="All">All Faculties</option>
-                      <option value="CNTT">Computer Science & Eng.</option>
-                      <option value="CK">Mechanical Engineering</option>
-                      <option value="XD">Civil Engineering</option>
+                      <option value="Computer Science">Computer Science & Eng.</option>
+                      <option value="Mechanical Engineering">Mechanical Engineering</option>
+                      <option value="Civil Engineering">Civil Engineering</option>
+                      <option value="Electrical - Electronic">Electrical - Electronic Eng.</option>
                     </select>
                   </div>
                 </div>
@@ -228,7 +243,7 @@ export default function StudentEngagementPage() {
               <input
                 type="text"
                 placeholder="Search by Student ID or Name..."
-                onChange={(e) => filteredStudents(e.target.value)}
+                onChange={(e) => filteredStudentsBySearch(e.target.value)}
                 className="text-black p-2 rounded-lg border border-[#e0e7ff] bg-[#f9faff] shadow-sm w-full md:w-1/3 outline-none focus:ring-2 focus:ring-indigo-200"
               />
             </div>
@@ -264,7 +279,7 @@ export default function StudentEngagementPage() {
                   {sliceStudents.map((student, index) => (
                     <tr
                       key={index}
-                      className="hover:bg-[#f1f5f9] transition-colors"
+                      className="hover:bg-[#f1f5f9] transition-colors h-12"
                     >
                       <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                         {student.id}
@@ -313,6 +328,13 @@ export default function StudentEngagementPage() {
                       </td>
                     </tr>
                   ))}
+                  {
+                    sliceStudents.length - studentPerPage < 0 && Array.from({ length: studentPerPage - sliceStudents.length }).map((_, idx) => (
+                      <tr key={`empty-${idx}`} className="h-12">
+                        <td colSpan={7} className="py-4"></td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
               </table>
             </div>
