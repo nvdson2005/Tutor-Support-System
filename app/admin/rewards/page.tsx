@@ -106,10 +106,10 @@ export default function AdminRewardsPage() {
   // --- Pagination ---
   const totalItems = filteredData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const paginatedData = filteredData.slice(
+  const [paginatedData, setPaginatedData] = useState(filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  );
+  ));
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -349,64 +349,57 @@ export default function AdminRewardsPage() {
                       </td>
                     </tr>
                   )}
+                  {paginatedData.length - itemsPerPage < 0 && Array.from({ length: itemsPerPage - paginatedData.length }).map((_, idx) => (
+                    <tr key={`empty-${idx}`} className="h-12">
+                      <td colSpan={6} className="py-8"></td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
             {/* Pagination Controls */}
-            {totalItems > 0 && (
-              <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <span className="text-sm text-gray-600">
-                  Showing {(currentPage - 1) * itemsPerPage + 1} -{" "}
-                  {Math.min(currentPage * itemsPerPage, totalItems)} of{" "}
-                  {totalItems} students
+            <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+              <span>
+                Showing {paginatedData.length} of {totalItems} results
+              </span>
+              <div className="flex space-x-2">
+                <button
+                  className="px-3 py-1 border rounded-lg hover:bg-gray-100 disabled:opacity-50"
+                  disabled={currentPage === 1}
+                  onClick={() => {
+                    setCurrentPage(currentPage - 1);
+                    setPaginatedData(
+                      filteredData.slice(
+                        (currentPage - 2) * itemsPerPage,
+                        (currentPage - 1) * itemsPerPage
+                      )
+                    );
+                  }}
+                >
+                  &lt; Previous
+                </button>
+                <span className="px-3 py-1 border rounded-lg bg-gray-200">
+                  Page {currentPage} of {totalPages}
                 </span>
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={() =>
-                      handlePageChange(Math.max(1, currentPage - 1))
-                    }
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                  >
-                    &lt; Prev
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`px-3 py-1 rounded-md text-sm font-medium border ${
-                          currentPage === page
-                            ? "bg-blue-900 text-white border-blue-900"
-                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
-
-                  <button
-                    onClick={() =>
-                      handlePageChange(Math.min(totalPages, currentPage + 1))
-                    }
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                  >
-                    Next &gt;
-                  </button>
-                </div>
+                <button
+                  className="px-3 py-1 border rounded-lg hover:bg-gray-100"
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1);
+                    setPaginatedData(filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage));
+                  }}
+                  disabled={currentPage === totalPages}
+                >
+                  Next &gt;
+                </button>
               </div>
-            )}
+            </div>
           </section>
         </div>
 
         {/* --- REWARD MODAL (POPUP) --- */}
         {isModalOpen && selectedStudent && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100">
               {/* Modal Header */}
               <div className="bg-blue-900 px-6 py-4 flex justify-between items-center">
