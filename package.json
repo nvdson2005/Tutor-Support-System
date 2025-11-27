@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emnapi/core": "^1.7.0",
+    "@emnapi/runtime": "^1.7.0",
+    "@napi-rs/wasm-runtime": "^0.2.12",
+    "@tybys/wasm-util": "^0.10.1",
     "autoprefixer": "^10.4.22",
     "chart": "^0.1.2",
     "chart.js": "^4.5.1",
