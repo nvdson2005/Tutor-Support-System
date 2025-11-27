@@ -104,7 +104,8 @@ export default function StudentDashboard() {
         <div className="p-8 max-w-6xl mx-auto">
           {/* Welcome Section */}
           <div className="mb-8">
-            <h3 className="text-2xl font-bold mb-4 font-serif">
+            {/* Đã xóa class font-serif ở đây */}
+            <h3 className="text-2xl font-bold mb-4">
               Welcome back, {studentName}!
             </h3>
             <p className="text-gray-500 mb-6 text-sm">Here's what's happening with your tutoring sessions today</p>
@@ -154,7 +155,8 @@ export default function StudentDashboard() {
                     >
                       {/* Left Info */}
                       <div className="flex-1">
-                        <h5 className="text-xl font-bold mb-3 font-serif">{session.subject}</h5>
+                        {/* Đã xóa class font-serif ở đây */}
+                        <h5 className="text-xl font-bold mb-3">{session.subject}</h5>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-12 text-sm text-gray-700">
                           <div className="flex items-center">
                             <CalendarIcon /> {session.date}
@@ -188,18 +190,18 @@ export default function StudentDashboard() {
 
                     {/* Expanded Actions */}
                     {isExpanded && (
-                      <div className="px-6 pb-6 pt-0 flex gap-3 animate-in slide-in-from-top-2 duration-200">
-                         <div className="w-full h-px bg-gray-100 mb-4 hidden"></div>
+                      <div className="px-6 pb-6 pt-0 flex justify-center gap-8 animate-in slide-in-from-top-2 duration-200">
+                         {/* Căn giữa 3 cục nút như yêu cầu trước */}
                          <button 
                             onClick={() => setDetailSession(session.id)}
-                            className="border border-blue-600 text-blue-600 px-6 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition"
+                            className="border border-blue-600 text-blue-600 px-8 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition"
                          >
                            Detail
                          </button>
-                         <button className="border border-yellow-500 text-yellow-600 px-6 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-50 transition">
+                         <button className="border border-yellow-500 text-yellow-600 px-8 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-50 transition">
                            Reschedule
                          </button>
-                         <button className="border border-red-500 text-red-500 px-6 py-2 rounded-lg text-sm font-semibold hover:bg-red-50 transition">
+                         <button className="border border-red-500 text-red-500 px-8 py-2 rounded-lg text-sm font-semibold hover:bg-red-50 transition">
                            Cancel
                          </button>
                       </div>
@@ -222,7 +224,8 @@ export default function StudentDashboard() {
                   className="border-b last:border-b-0 p-6 flex items-center justify-between"
                 >
                   <div>
-                    <div className="font-bold text-xl font-serif">{session.subject}</div>
+                    {/* Đã xóa class font-serif ở đây */}
+                    <div className="font-bold text-xl">{session.subject}</div>
                     <div className="text-sm text-gray-500 mt-1 flex gap-4">
                       <span>{session.date} | {session.time}</span>
                     </div>
