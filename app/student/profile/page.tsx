@@ -43,7 +43,7 @@ export default function StudentProfile() {
             {/* --- Main Card --- */}
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
               
-              {/* 1. Header Banner */}
+              {/* 1. Header Banner*/}
               <div className="h-36 bg-gradient-to-r from-[#1e3a8a] to-[#3b82f6] relative">
                 <button className="absolute top-6 right-6 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border border-white/40 px-6 py-2 rounded-full font-semibold transition-all text-sm flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
@@ -72,7 +72,7 @@ export default function StudentProfile() {
                   </div>
 
                   {/* Stats (GPA & Credits) */}
-                  <div className="flex gap-4 md:mb-1 mt-4 md:mt-0">
+                  <div className="flex gap-4 md:mb-4 mt-4 md:mt-0">
                     <StatCard label="GPA" value="3.2" colorClass="bg-[#00B050]" />
                     <StatCard label="Credits" value="78" colorClass="bg-[#FF6600]" />
                   </div>
