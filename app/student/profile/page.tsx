@@ -3,7 +3,8 @@ import React from "react";
 import TopBar from "@/app/_components/topbar";
 import Sidebar from "../../_components/sidebar";
 import { navigateData } from "../_components/navigatedata";
-
+import { useSelector } from "react-redux";
+import { User } from "@/app/_lib/store";
 const InfoItem = ({
   icon,
   label,
@@ -64,6 +65,7 @@ export default function StudentProfile() {
       "Career guidance",
     ],
   });
+  const user = useSelector((state: {auth: {user: User}}) => state.auth.user);
   return (
     <div className="flex min-h-screen bg-[#F3F4F6] text-black font-sans">
       <Sidebar chosenIndex={2} navigateData={navigateData} />
@@ -150,7 +152,7 @@ export default function StudentProfile() {
                   {/* Name & ID */}
                   <div className="flex-1 text-center md:text-left mb-2 md:mb-1">
                     <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
-                      Student Name
+                      {user?.name || "Nguyen Van A"}
                     </h1>
                     <div className="flex items-center justify-center md:justify-start gap-3 mt-2 text-gray-600">
                       <span className="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded border border-blue-200 font-bold tracking-wide">
@@ -258,7 +260,7 @@ export default function StudentProfile() {
                           </svg>
                         }
                         label="Email Address"
-                        value="abcxyz@hcmut.edu.vn"
+                        value="studentemail@hcmut.edu.vn"
                         isLink={true}
                       />
                     </div>

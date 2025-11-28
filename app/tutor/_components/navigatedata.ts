@@ -3,4 +3,5 @@ export const navigateData = [
   { path: "/tutor/schedule", label: "Schedule" },
   { path: "/tutor/profile", label: "My Profile" },
   { path: "/tutor/old-sessions", label: "Old Sessions" },
+  { path: "/library/books", label: "Library Books" },
 ];

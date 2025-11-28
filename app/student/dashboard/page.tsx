@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Sidebar from "@/app/_components/sidebar";
 import TopBar from "@/app/_components/topbar";
 import { navigateData } from "../_components/navigatedata";
+import Link from "next/link";
 
 // --- Types & Data ---
 const studentName: string = "Nguyen Van A";
@@ -83,11 +84,18 @@ const ChevronRightIcon = ({ rotated }: { rotated: boolean }) => (
   </svg>
 );
 
+
 export default function StudentDashboard() {
   const [detailSession, setDetailSession] = useState<number | null>(null);
   const [expandedId, setExpandedId] = useState<number | null>(null); // State for accordion
+  const [rescheduleSessionId, setRescheduleSessionId] = useState<number | null>(null);
+  const [ratingSessionId, setRatingSessionId] = useState<number | null>(null);
+  const [ratingValue, setRatingValue] = useState<number>(5);
+  const [ratingComment, setRatingComment] = useState<string>("");
 
   const sessionDetail = upcomingSessions.find((s) => s.id === detailSession);
+  const rescheduleSession = upcomingSessions.find((s) => s.id === rescheduleSessionId);
+  const ratingSession = completedSessions.find((s) => s.id === ratingSessionId);
 
   const toggleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
@@ -98,17 +106,14 @@ export default function StudentDashboard() {
       {/* Sidebar */}
       <Sidebar chosenIndex={0} navigateData={navigateData} />
 
-      {/* Main Content */}
       <main className="flex-1">
         <TopBar username={studentName} dashboardContent="Student Dashboard"></TopBar>
         <div className="p-8 max-w-6xl mx-auto">
-          {/* Welcome Section */}
           <div className="mb-8">
-            {/* Đã xóa class font-serif ở đây */}
             <h3 className="text-2xl font-bold mb-4">
               Welcome back, {studentName}!
             </h3>
-            <p className="text-gray-500 mb-6 text-sm">Here's what's happening with your tutoring sessions today</p>
+            <p className="text-gray-500 mb-6 text-sm">Here&#39;s what&#39;s happening with your tutoring sessions today</p>
             
             <div className="flex gap-6">
               <div className="bg-white rounded-xl shadow-sm border p-6 flex-1 flex items-center justify-between">
@@ -181,7 +186,9 @@ export default function StudentDashboard() {
                              className="bg-[#8EDE61] text-green-900 font-bold px-6 py-2 rounded-full text-sm shadow-sm hover:opacity-90 transition"
                              onClick={(e) => e.stopPropagation()} // Prevent expansion when clicking Go Online
                            >
+                            <Link href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
                              Go Online
+                            </Link>
                            </button>
                         )}
                         <ChevronRightIcon rotated={isExpanded} />
@@ -198,7 +205,10 @@ export default function StudentDashboard() {
                          >
                            Detail
                          </button>
-                         <button className="border border-yellow-500 text-yellow-600 px-8 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-50 transition">
+                         <button
+                           className="border border-yellow-500 text-yellow-600 px-8 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-50 transition"
+                           onClick={e => { e.stopPropagation(); setRescheduleSessionId(session.id); }}
+                         >
                            Reschedule
                          </button>
                          <button className="border border-red-500 text-red-500 px-8 py-2 rounded-lg text-sm font-semibold hover:bg-red-50 transition">
@@ -233,7 +243,10 @@ export default function StudentDashboard() {
                         <UserIcon/> {session.tutor}
                     </div>
                   </div>
-                  <button className="bg-yellow-300 text-black px-8 py-2 rounded-lg text-md font-medium shadow-sm hover:bg-yellow-400">
+                  <button
+                    className="bg-yellow-300 text-black px-8 py-2 rounded-lg text-md font-medium shadow-sm hover:bg-yellow-400"
+                    onClick={() => setRatingSessionId(session.id)}
+                  >
                     Rating
                   </button>
                 </div>
@@ -247,24 +260,21 @@ export default function StudentDashboard() {
       {sessionDetail && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#F3F4F6] rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden relative animate-in fade-in zoom-in duration-200">
-            
             {/* Header */}
             <div className="bg-white p-6 border-b flex justify-between items-start">
-                 <h3 className="text-2xl font-bold text-gray-800 pr-10">
-                    {sessionDetail.subject}
-                 </h3>
-                 <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-md w-8 h-8 flex items-center justify-center transition absolute top-6 right-6"
-                    onClick={() => setDetailSession(null)}
-                 >
-                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                 </button>
+              <h3 className="text-2xl font-bold text-gray-800 pr-10">
+                {sessionDetail.subject}
+              </h3>
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-md w-8 h-8 flex items-center justify-center transition absolute top-6 right-6"
+                onClick={() => setDetailSession(null)}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
             </div>
-
             {/* Body */}
             <div className="p-8">
               <div className="font-bold text-lg mb-4 text-gray-800">Materials from Tutor</div>
-              
               {sessionDetail.materials.length === 0 ? (
                 <div className="text-center py-10 bg-white rounded-lg border border-dashed text-gray-400">
                   No materials uploaded for this session.
@@ -278,16 +288,15 @@ export default function StudentDashboard() {
                     >
                       <div className="flex items-center gap-4">
                         <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                           <BookIcon />
+                          <BookIcon />
                         </div>
                         <div>
                           <h4 className="font-bold text-gray-900 leading-tight">{material.title}</h4>
                           {material.author && (
-                              <p className="text-xs text-gray-400 mt-1">{material.author}</p>
+                            <p className="text-xs text-gray-400 mt-1">{material.author}</p>
                           )}
                         </div>
                       </div>
-                      
                       <a
                         href={material.link}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-sm transition whitespace-nowrap"
@@ -300,8 +309,93 @@ export default function StudentDashboard() {
                 </div>
               )}
             </div>
-            
             <div className="h-4 bg-[#F3F4F6]"></div>
+          </div>
+        </div>
+      )}
+
+      {/* --- Reschedule Modal --- */}
+      {rescheduleSession && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-200">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-800">Reschedule Session</h3>
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-md w-8 h-8 flex items-center justify-center transition"
+                onClick={() => setRescheduleSessionId(null)}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+            <form
+              className="p-6 space-y-4"
+              onSubmit={e => { e.preventDefault(); setRescheduleSessionId(null); }}
+            >
+              <div>
+                <label className="block text-sm font-medium mb-1">Date</label>
+                <input type="date" className="border rounded px-3 py-2 w-full" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Time</label>
+                <input type="time" className="border rounded px-3 py-2 w-full" required />
+              </div>
+              <div className="flex gap-2 justify-end mt-4">
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-semibold">Confirm</button>
+                <button type="button" className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 font-semibold" onClick={() => setRescheduleSessionId(null)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- Rating Modal --- */}
+      {ratingSession && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-200">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-800">Rate Session</h3>
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-md w-8 h-8 flex items-center justify-center transition"
+                onClick={() => setRatingSessionId(null)}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+            <form
+              className="p-6 space-y-4"
+              onSubmit={e => { e.preventDefault(); setRatingSessionId(null); setRatingValue(5); setRatingComment(""); }}
+            >
+              <div>
+                <label className="block text-sm font-medium mb-1">Rating</label>
+                <div className="flex gap-1 items-center">
+                  {[1,2,3,4,5].map(star => (
+                    <button
+                      key={star}
+                      type="button"
+                      className={star <= ratingValue ? "text-yellow-400" : "text-gray-300"}
+                      onClick={() => setRatingValue(star)}
+                    >
+                      <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Comment</label>
+                <textarea
+                  className="border rounded px-3 py-2 w-full"
+                  rows={3}
+                  value={ratingComment}
+                  onChange={e => setRatingComment(e.target.value)}
+                  placeholder="Share your feedback..."
+                  required
+                />
+              </div>
+              <div className="flex gap-2 justify-end mt-4">
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-semibold">Submit</button>
+                <button type="button" className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 font-semibold" onClick={() => setRatingSessionId(null)}>Cancel</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
