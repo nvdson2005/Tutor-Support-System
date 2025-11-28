@@ -26,7 +26,7 @@ export default function Login() {
     });
 
     if (match) {
-      dispatch(login(username));
+      dispatch(login(match.username, match.name));
       router.push(match.route);
     } else {
       alert("Invalid username or password");

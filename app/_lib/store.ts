@@ -6,6 +6,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 export interface User {
   username: string;
+  name: string;
 }
 const initialState : { user: User | null } = {
   user: null,
