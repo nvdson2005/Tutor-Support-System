@@ -1,30 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-const tutorAccount = {
-  username: "tutor",
-  password: "1",
-};
-
-const studentAccount = {
-  username: "student",
-  password: "1",
-};
-
-const adminAccount = {
-  username: "admin",
-  password: "1",
-};
-const coordinatorAccount = {
-  username : 'coordinator',
-  password : '1'
-}
-
+import { useDispatch } from "react-redux";
+import { accountsByRole } from "@/app/_lib/auth";
+import { login } from "@/app/_lib/actions";
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(e.target);
     const form = e.target as HTMLFormElement;
     const username = (
       form
@@ -37,29 +21,14 @@ export default function Login() {
         .namedItem("password") as HTMLInputElement
     ).value;
 
-    if (
-      username === tutorAccount.username &&
-      password === tutorAccount.password
-    ) {
-      router.push("/tutor/dashboard");
-    } else if (
-      username === studentAccount.username &&
-      password === studentAccount.password
-    ) {
-      router.push("/student/dashboard");
-    } else if (
-      username === adminAccount.username &&
-      password === adminAccount.password
-    ) {
-      router.push("/admin/tracking");
-    } else if (
-      username === coordinatorAccount.username &&
-      password === coordinatorAccount.password
-    ) 
-    {
-      router.push("/coordinator/dashboard")
-    }
-    else {
+    const match = Object.values(accountsByRole).find((account) => {
+      return account.username === username && account.password === password;
+    });
+
+    if (match) {
+      dispatch(login(username));
+      router.push(match.route);
+    } else {
       alert("Invalid username or password");
     }
   };
@@ -104,7 +73,7 @@ export default function Login() {
                   Warn me before logging in to other pages
                 </p>
               </div>
-              <div className="w-full h-0.5 bg-gray-200 my-1">-</div>
+              <div className="w-full h-0.5 bg-gray-200 my-1"></div>
               <div className="flex gap-2 mt-4">
                 <button
                   type="submit"

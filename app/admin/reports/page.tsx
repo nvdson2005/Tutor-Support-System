@@ -115,7 +115,7 @@ export default function StudentEngagementPage() {
     }
     const filtered = studentsData.filter((student) =>
       student.name.toLowerCase().includes(query.toLowerCase()) || student.id.includes(query)
-    );
+  );
     setSliceStudents(filtered.slice(0, studentPerPage));
   };
 

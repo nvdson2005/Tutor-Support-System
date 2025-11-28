@@ -38,7 +38,6 @@ const oldSessions = [
     subject: "Web Development",
     date: "Saturday, 25/10/2025",
     time: "14:00 - 16:00",
-    tutor: "Tutor NameX",
     mode: "Online Session",
     feedbacks: [
       { user: "Student A", rating: 5, comment: "Very good" },
@@ -54,7 +53,6 @@ const oldSessions = [
     subject: "Principles of Programming Languages",
     date: "Thursday, 15/12/2025",
     time: "8:00 - 9:30",
-    tutor: "Tutor NameY",
     mode: "BKH3-311",
     feedbacks: [],
     materials: [],
@@ -105,7 +103,6 @@ export default function TutorOldSessions() {
                                             </span>
                                         </div>
                                         <div className="flex items-center"><ClockIcon /> {session.time}</div>
-                                        <div className="flex items-center"><UserIcon /> {session.tutor}</div>
                                     </div>
                                 </div>
                                 <div className="pl-4">

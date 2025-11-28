@@ -71,7 +71,7 @@ export default function TutorSchedule() {
         <div className="flex-1 p-6 md:p-10 overflow-hidden flex flex-col">
           
           {/* Calendar Card Container */}
-          <div className="bg-white rounded-[2rem] shadow-xl border border-white flex flex-col flex-1 overflow-hidden relative">
+          <div className="bg-white rounded-4xl shadow-xl border border-white flex flex-col flex-1 overflow-hidden relative">
             
             {/* 1. Header Navigation */}
             <div className="px-8 py-6 flex justify-between items-center border-b border-gray-100 bg-white z-10">
@@ -120,7 +120,7 @@ export default function TutorSchedule() {
                         onClick={(e) => e.stopPropagation()}
                         className="
                           bg-white border-l-4 border-indigo-500 pl-3 pr-2 py-3 
-                          rounded-lg shadow-sm hover:shadow-md hover:translate-y-[-2px] 
+                          rounded-lg shadow-sm hover:shadow-md hover:translate-y-0.5 
                           transition-all cursor-pointer group/slot
                         "
                       >
@@ -148,10 +148,10 @@ export default function TutorSchedule() {
       {/* --- MODAL: GLASSMORPHISM STYLE --- */}
       {modal && (
         <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-md flex items-center justify-center z-50 animate-in fade-in zoom-in duration-300">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-8 relative border border-white/50">
-            
+          <div className="bg-white rounded-4xl shadow-2xl w-full max-w-md p-8 relative border border-white/50">
+
             {/* Decoration Header */}
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-t-[2rem]"></div>
+            <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-indigo-500 to-purple-500 rounded-t-4xl"></div>
 
             <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">Add Availability</h3>
 
@@ -213,7 +213,7 @@ export default function TutorSchedule() {
                 Cancel
               </button>
               <button
-                className="flex-1 bg-indigo-600 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-xl hover:translate-y-[-1px] transition-all"
+                className="flex-1 bg-indigo-600 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-xl hover:translate-y-px transition-all"
                 onClick={handleSave}
               >
                 Save Slot
