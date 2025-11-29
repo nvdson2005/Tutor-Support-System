@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import StoreProvider from "./_components/StoreProvider";
+import AIChatPopup from "./_components/pop_upChat"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,10 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+        
           {children}
+
+          <AIChatPopup />
         </body>
       </StoreProvider>
     </html>
