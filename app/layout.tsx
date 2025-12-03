@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import StoreProvider from "./_components/StoreProvider";
-import AIChatPopup from "./_components/pop_upChat"; 
-
+import ChatPopup from "./_components/chatPopup";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,8 +31,7 @@ export default function RootLayout({
         >
         
           {children}
-
-          <AIChatPopup />
+          <ChatPopup />
         </body>
       </StoreProvider>
     </html>
